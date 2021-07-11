@@ -22,6 +22,9 @@ public:
     void gotMessage(ofMessage msg);
 
 private:
-    ofMesh m_triangle;
+    ofMesh m_quad;
     ofShader m_shader;
+    ofImage m_parrotImg;
+    ofImage m_checkerboardImg;
+    float m_brightness;
 };

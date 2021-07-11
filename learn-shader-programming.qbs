@@ -12,11 +12,16 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "bin/data/brightness.frag",
             "bin/data/first_fragment.frag",
             "bin/data/first_vertex.vert",
-            'src/main.cpp',
-            'src/ofApp.cpp',
-            'src/ofApp.h',
+            "bin/data/texture_blend.frag",
+            "bin/data/uv_passthrough.vert",
+            "bin/data/uv_scrolling.vert",
+            "bin/data/uv_viz.frag",
+            "src/main.cpp",
+            "src/ofApp.cpp",
+            "src/ofApp.h",
         ]
 
         of.addons: [
