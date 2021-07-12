@@ -3,22 +3,30 @@
 //--------------------------------------------------------------
 void ofApp::setup()
 {
+    m_quad.addVertex(glm::vec3(-1.f, -1.f, 0.f));
+    m_quad.addVertex(glm::vec3(-1.f,  1.f, 0.f));
+    m_quad.addVertex(glm::vec3( 1.f,  1.f, 0.f));
+    m_quad.addVertex(glm::vec3( 1.f, -1.f, 0.f));
+
+    m_quad.addTexCoord(glm::vec2(0.f, 0.f));
+    m_quad.addTexCoord(glm::vec2(0.f, 1.f));
+    m_quad.addTexCoord(glm::vec2(1.f, 1.f));
+    m_quad.addTexCoord(glm::vec2(1.f, 0.f));
+
+    ofIndexType indices[6] = { 0, 1, 2, 2, 3, 0 };
+    m_quad.addIndices(indices, 6);
+    \
+    m_shader.load("uv_passthrough.vert", "texture_blend.frag");
+
     ofDisableArbTex();
-    ofEnableDepthTest();
 
-    buildMesh(m_charMesh, 0.1f, 0.2f, glm::vec3(0.f, -0.24f, 0.f));
-    m_alienImg.load("ch4/alien.png");
-    m_alienImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
+    m_parrotImg.load("parrot.png");
+    m_parrotImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    buildMesh(m_backgroundMesh, 1.f, 1.f, glm::vec3(0.f, 0.f, 0.5f));
-    m_backgroundImg.load("ch4/forest.png");
-    m_backgroundImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
+    m_checkerboardImg.load("checker.jpg");
+    m_checkerboardImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    buildMesh(m_cloudMesh, 0.5f, 0.3f, glm::vec3(-0.55f, 0.f, 0.f));
-    m_cloudImg.load("ch4/cloud.png");
-    m_cloudImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
-
-    m_shader.load("ch4/passthrough.vert", "ch4/alphaTest.frag");
+    m_brightness = 2.f;
 }
 
 //--------------------------------------------------------------
@@ -31,14 +39,12 @@ void ofApp::draw()
 {
     m_shader.begin();
 
-    m_shader.setUniformTexture("tex", m_backgroundImg, 0);
-    m_backgroundMesh.draw();
+    m_shader.setUniformTexture("parrotTex", m_parrotImg, 0);
+    m_shader.setUniformTexture("checkerboardTex", m_checkerboardImg, 1);
+    m_shader.setUniform1f("time", ofGetElapsedTimef());
+    m_shader.setUniform1f("brightness", m_brightness);
 
-    m_shader.setUniformTexture("tex", m_alienImg, 0);
-    m_charMesh.draw();
-
-    m_shader.setUniformTexture("tex", m_cloudImg, 0);
-    m_cloudMesh.draw();
+    m_quad.draw();
 
     m_shader.end();
 }
@@ -96,26 +102,4 @@ void ofApp::gotMessage(ofMessage msg){
 //--------------------------------------------------------------
 void ofApp::dragEvent(ofDragInfo dragInfo){
 
-}
-
-void ofApp::buildMesh(ofMesh& mesh, float w, float h, glm::vec3 pos)
-{
-    float verts[] = {
-        -w + pos.x, -h + pos.y, pos.z,
-        -w + pos.x,  h + pos.y, pos.z,
-         w + pos.x,  h + pos.y, pos.z,
-         w + pos.x, -h + pos.y, pos.z
-    };
-    float uvs[] = { 0.f, 0.f, 0.f, 1.f, 1.f, 1.f, 1.f, 0.f };
-
-    for (int i = 0; i < 4; i++) {
-        int vertIdx = i * 3;
-        int uvIdx = i * 2;
-
-        mesh.addVertex(glm::vec3(verts[vertIdx], verts[vertIdx + 1], verts[vertIdx + 2]));
-        mesh.addTexCoord(glm::vec2(uvs[uvIdx], uvs[uvIdx + 1]));
-    }
-
-    ofIndexType indices[6] = { 0, 1, 2, 2, 3, 0 };
-    mesh.addIndices(indices, 6);
 }

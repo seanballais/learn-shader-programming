@@ -21,17 +21,10 @@ public:
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
-    void buildMesh(ofMesh& mesh, float w, float h, glm::vec3 pos);
-
 private:
+    ofMesh m_quad;
     ofShader m_shader;
-
-    ofMesh m_charMesh;
-    ofImage m_alienImg;
-
-    ofMesh m_backgroundMesh;
-    ofImage m_backgroundImg;
-
-    ofMesh m_cloudMesh;
-    ofImage m_cloudImg;
+    ofImage m_parrotImg;
+    ofImage m_checkerboardImg;
+    float m_brightness;
 };

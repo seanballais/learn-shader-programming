@@ -12,7 +12,8 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
-            "bin/data/brightness.frag",
+            "bin/data/ch4/alphaTest.frag",
+            "bin/data/ch4/passthrough.vert",
             "bin/data/first_fragment.frag",
             "bin/data/first_vertex.vert",
             "bin/data/texture_blend.frag",

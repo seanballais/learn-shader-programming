@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<!-- Written by QtCreator 4.15.1, 2021-07-12T01:16:58. -->
+<!-- Written by QtCreator 4.15.1, 2021-07-13T02:14:29. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -136,6 +136,7 @@
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Debug</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qbs.QbsBuildConfiguration</value>
     <value type="QString" key="Qbs.configName">Debug_Desktop__b60dbb5f01061cd2</value>
+    <value type="int" key="QtQuickCompiler">0</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
     <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/seanballais/Code/Learning/learn-shader-programming/build/release</value>
