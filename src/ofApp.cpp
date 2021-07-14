@@ -6,8 +6,8 @@ void ofApp::setup()
     ofDisableArbTex();
     ofEnableDepthTest();
 
-    buildMesh(m_charMesh, 0.1f, 0.2f, glm::vec3(0.f, -0.24f, 0.f));
-    m_alienImg.load("ch4/alien.png");
+    buildMesh(m_charMesh, 0.28f, 0.19f, glm::vec3(0.f, -0.24f, 0.f));
+    m_alienImg.load("ch4/walk_sheet.png");
     m_alienImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
     buildMesh(m_backgroundMesh, 1.f, 1.f, glm::vec3(0.f, 0.f, 0.5f));
@@ -18,7 +18,13 @@ void ofApp::setup()
     m_cloudImg.load("ch4/cloud.png");
     m_cloudImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    m_shader.load("ch4/passthrough.vert", "ch4/alphaTest.frag");
+    buildMesh(m_sunMesh, 1.f, 1.f, glm::vec3(0.f, 0.f, 0.4f));
+    m_sunImg.load("ch4/sun.png");
+    m_sunImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
+
+    m_alphaTestShader.load("ch4/passthrough.vert", "ch4/alphaTest.frag");
+    m_cloudShader.load("ch4/passthrough.vert", "ch4/cloud.frag");
+    m_spritesheetShader.load("ch4/spritesheet.vert", "ch4/alphaTest.frag");
 }
 
 //--------------------------------------------------------------
@@ -29,18 +35,47 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    m_shader.begin();
+    ofDisableBlendMode();
 
-    m_shader.setUniformTexture("tex", m_backgroundImg, 0);
+    m_alphaTestShader.begin();
+
+    m_alphaTestShader.setUniformTexture("tex", m_backgroundImg, 0);
     m_backgroundMesh.draw();
 
-    m_shader.setUniformTexture("tex", m_alienImg, 0);
+    m_alphaTestShader.end();
+
+    m_spritesheetShader.begin();
+
+    static float frame = 0.f;
+    frame = (frame > 10) ? 0.f : frame += 0.2f;
+    glm::vec2 spriteSize = glm::vec2(0.28f, 0.19f);
+    glm::vec2 spriteFrame = glm::vec2((int) frame % 3, (int) frame / 3);
+
+    // TODO: Animation not working yet.
+
+    m_spritesheetShader.setUniformTexture("tex", m_alienImg, 0);
+    m_spritesheetShader.setUniform2f("size", spriteSize);
+    m_spritesheetShader.setUniform2f("offset", spriteFrame);
     m_charMesh.draw();
 
-    m_shader.setUniformTexture("tex", m_cloudImg, 0);
+    m_spritesheetShader.end();
+
+    m_alphaTestShader.begin();
+
+    ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
+
+    m_cloudShader.begin();
+
+    m_cloudShader.setUniformTexture("tex", m_cloudImg, 0);
     m_cloudMesh.draw();
 
-    m_shader.end();
+    ofDisableDepthTest();
+    ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ADD);
+
+    m_cloudShader.setUniformTexture("tex", m_sunImg, 0);
+    m_sunMesh.draw();
+
+    m_cloudShader.end();
 }
 
 //--------------------------------------------------------------

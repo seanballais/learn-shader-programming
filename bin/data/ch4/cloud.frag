@@ -9,7 +9,5 @@ out vec4 outColour;
 void main()
 {
     outColour = texture(tex, fragUV);
-    if (outColour.a < 1.f) {
-        discard;
-    }
+    outColour.a = min(outColour.a, 0.8);
 }

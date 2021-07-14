@@ -24,7 +24,9 @@ public:
     void buildMesh(ofMesh& mesh, float w, float h, glm::vec3 pos);
 
 private:
-    ofShader m_shader;
+    ofShader m_alphaTestShader;
+    ofShader m_cloudShader;
+    ofShader m_spritesheetShader;
 
     ofMesh m_charMesh;
     ofImage m_alienImg;
@@ -34,4 +36,7 @@ private:
 
     ofMesh m_cloudMesh;
     ofImage m_cloudImg;
+
+    ofMesh m_sunMesh;
+    ofImage m_sunImg;
 };
