@@ -6,7 +6,7 @@ void ofApp::setup()
     ofDisableArbTex();
     ofEnableDepthTest();
 
-    buildMesh(m_charMesh, 0.28f, 0.19f, glm::vec3(0.f, -0.24f, 0.f));
+    buildMesh(m_charMesh, 0.1f, 0.2f, glm::vec3(0.f, -0.24f, 0.f));
     m_alienImg.load("ch4/walk_sheet.png");
     m_alienImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
@@ -35,33 +35,27 @@ void ofApp::update(){
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    ofDisableBlendMode();
-
-    m_alphaTestShader.begin();
-
-    m_alphaTestShader.setUniformTexture("tex", m_backgroundImg, 0);
-    m_backgroundMesh.draw();
-
-    m_alphaTestShader.end();
-
-    m_spritesheetShader.begin();
-
     static float frame = 0.f;
     frame = (frame > 10) ? 0.f : frame += 0.2f;
     glm::vec2 spriteSize = glm::vec2(0.28f, 0.19f);
     glm::vec2 spriteFrame = glm::vec2((int) frame % 3, (int) frame / 3);
 
-    // TODO: Animation not working yet.
+    ofDisableBlendMode();
+    ofEnableDepthTest();
 
+    m_spritesheetShader.begin();
     m_spritesheetShader.setUniformTexture("tex", m_alienImg, 0);
     m_spritesheetShader.setUniform2f("size", spriteSize);
     m_spritesheetShader.setUniform2f("offset", spriteFrame);
     m_charMesh.draw();
-
     m_spritesheetShader.end();
 
     m_alphaTestShader.begin();
+    m_alphaTestShader.setUniformTexture("tex", m_backgroundImg, 0);
+    m_backgroundMesh.draw();
+    m_alphaTestShader.end();
 
+    ofDisableDepthTest();
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ALPHA);
 
     m_cloudShader.begin();
@@ -69,7 +63,6 @@ void ofApp::draw()
     m_cloudShader.setUniformTexture("tex", m_cloudImg, 0);
     m_cloudMesh.draw();
 
-    ofDisableDepthTest();
     ofEnableBlendMode(ofBlendMode::OF_BLENDMODE_ADD);
 
     m_cloudShader.setUniformTexture("tex", m_sunImg, 0);
