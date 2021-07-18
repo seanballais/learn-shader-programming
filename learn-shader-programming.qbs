@@ -14,6 +14,7 @@ Project{
         files: [
             "bin/data/ch4/alphaTest.frag",
             "bin/data/ch4/cloud.frag",
+            "bin/data/ch4/cloud.vert",
             "bin/data/ch4/passthrough.vert",
             "bin/data/ch4/spritesheet.vert",
             "bin/data/first_fragment.frag",

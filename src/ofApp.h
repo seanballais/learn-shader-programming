@@ -2,6 +2,12 @@
 
 #include "ofMain.h"
 
+struct CameraData
+{
+    glm::vec3 position;
+    float rotation;
+};
+
 class ofApp : public ofBaseApp{
 
 public:
@@ -22,8 +28,12 @@ public:
     void gotMessage(ofMessage msg);
 
     void buildMesh(ofMesh& mesh, float w, float h, glm::vec3 pos);
+    glm::mat4 buildMatrix(glm::vec3 translation, float rotation, glm::vec3 scale);
+    glm::mat4 buildViewMatrix(CameraData camera);
 
 private:
+    CameraData m_camera;
+
     ofShader m_alphaTestShader;
     ofShader m_cloudShader;
     ofShader m_spritesheetShader;
@@ -39,4 +49,9 @@ private:
 
     ofMesh m_sunMesh;
     ofImage m_sunImg;
+
+    bool m_doWalkLeft;
+    bool m_doWalkRight;
+    bool m_flipCharacter;
+    glm::vec3 m_characterPosition;
 };
