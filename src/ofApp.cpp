@@ -10,11 +10,11 @@ void ofApp::setup()
     m_alienImg.load("ch4/walk_sheet.png");
     m_alienImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    buildMesh(m_backgroundMesh, 1.f, 1.f, glm::vec3(0.f, 0.f, 0.5f));
+    buildMesh(m_backgroundMesh, 1.f, 1.f, glm::vec3(0.f, 0.f, -0.5f));
     m_backgroundImg.load("ch4/forest.png");
     m_backgroundImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
-    buildMesh(m_cloudMesh, 0.5f, 0.3f, glm::vec3(0.f, 0.f, 0.f));
+    buildMesh(m_cloudMesh, 0.25f, 0.15f, glm::vec3(0.f, 0.f, 0.f));
     m_cloudImg.load("ch4/cloud.png");
     m_cloudImg.getTexture().setTextureWrap(GL_REPEAT, GL_REPEAT);
 
@@ -45,13 +45,16 @@ void ofApp::update()
 //--------------------------------------------------------------
 void ofApp::draw()
 {
-    m_camera.position = glm::vec3(-1.f, 0.f, 0.f);
+    m_camera.position = glm::vec3(0.f, 0.f, 0.f);
     glm::mat4 view = buildViewMatrix(m_camera);
+    glm::mat4 projection = glm::ortho(-1.33f, 1.33f, -1.f, 1.f, 0.f, 10.f);
 
     static float frame = 0.f;
     frame = (frame > 10) ? 0.f : frame += 0.2f;
     glm::vec2 spriteSize = glm::vec2(0.28f, 0.19f);
     glm::vec2 spriteFrame = glm::vec2((int) frame % 3, (int) frame / 3);
+
+    glm::mat4 identity = glm::mat4{};
 
     ofDisableBlendMode();
     ofEnableDepthTest();
@@ -59,6 +62,7 @@ void ofApp::draw()
     m_spritesheetShader.begin();
     m_spritesheetShader.setUniformMatrix4f("view", view);
     m_spritesheetShader.setUniformMatrix4f("model", glm::translate(m_characterPosition));
+    m_spritesheetShader.setUniformMatrix4f("projection", projection);
     m_spritesheetShader.setUniformTexture("tex", m_alienImg, 0);
     m_spritesheetShader.setUniform2f("size", spriteSize);
     m_spritesheetShader.setUniform2f("offset", spriteFrame);
@@ -67,7 +71,9 @@ void ofApp::draw()
     m_spritesheetShader.end();
 
     m_alphaTestShader.begin();
+    m_alphaTestShader.setUniformMatrix4f("model", identity);
     m_alphaTestShader.setUniformMatrix4f("view", view);
+    m_alphaTestShader.setUniformMatrix4f("projection", projection);
     m_alphaTestShader.setUniformTexture("tex", m_backgroundImg, 0);
     m_backgroundMesh.draw();
     m_alphaTestShader.end();
@@ -91,13 +97,14 @@ void ofApp::draw()
     glm::mat4 transformB = buildMatrix(glm::vec3(0.4f, 0.2f, 0.f), 1.f, glm::vec3(1.f, 1.f, 1.f));
 
     m_cloudShader.begin();
-    m_alphaTestShader.setUniformMatrix4f("view", view);
+    m_cloudShader.setUniformMatrix4f("view", view);
+    m_cloudShader.setUniformMatrix4f("projection", projection);
     m_cloudShader.setUniformTexture("tex", m_cloudImg, 0);
 
-    m_cloudShader.setUniformMatrix4f("transform", finalMatrixA);
+    m_cloudShader.setUniformMatrix4f("model", finalMatrixA);
     m_cloudMesh.draw();
 
-    m_cloudShader.setUniformMatrix4f("transform", transformB);
+    m_cloudShader.setUniformMatrix4f("model", transformB);
     m_cloudMesh.draw();
 
     m_cloudShader.end();
