@@ -12,17 +12,9 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
-            "bin/data/ch4/alphaTest.frag",
-            "bin/data/ch4/cloud.frag",
-            "bin/data/ch4/cloud.vert",
-            "bin/data/ch4/passthrough.vert",
-            "bin/data/ch4/spritesheet.vert",
-            "bin/data/first_fragment.frag",
-            "bin/data/first_vertex.vert",
-            "bin/data/texture_blend.frag",
-            "bin/data/uv_passthrough.vert",
-            "bin/data/uv_scrolling.vert",
-            "bin/data/uv_viz.frag",
+            "bin/data/ch7/mesh.vert",
+            "bin/data/ch7/torus.ply",
+            "bin/data/ch7/uv_vis.frag",
             "src/main.cpp",
             "src/ofApp.cpp",
             "src/ofApp.h",
