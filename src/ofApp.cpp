@@ -1,4 +1,4 @@
-#include <iostream>
+#include <cmath>
 
 #include <glm/gtx/string_cast.hpp>
 
@@ -21,7 +21,7 @@ void ofApp::setup()
     ofEnableDepthTest();
 
     m_torusMesh.load("ch7/torus.ply");
-    m_shader.load("ch7/mesh.vert", "ch7/diffuse.frag");
+    m_shader.load("ch7/mesh.vert", "ch7/torus.frag");
 }
 
 //--------------------------------------------------------------
@@ -54,12 +54,17 @@ void ofApp::draw()
     glm::mat4 mvp = projection * view * model;
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
 
+    float rimIntensity = (std::sin(M_PI * (ofGetElapsedTimeMillis() / 1000.f)) / 4.f) + 0.5f;
+
     m_shader.begin();
     m_shader.setUniformMatrix4f("mvp", mvp);
     m_shader.setUniformMatrix3f("normalMatrix", normalMatrix);
+    m_shader.setUniformMatrix4f("model", model);
     m_shader.setUniform3f("lightDirection", getLightDirection(directionalLight));
     m_shader.setUniform3f("lightColour", getLightColour(directionalLight));
     m_shader.setUniform3f("meshColour", glm::vec3(1.f, 0.f, 0.f));
+    m_shader.setUniform3f("cameraPosition", m_camera.position);
+    m_shader.setUniform1f("rimIntensity", rimIntensity);
     m_torusMesh.draw();
     m_shader.end();
 }
