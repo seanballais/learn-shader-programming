@@ -5,8 +5,14 @@
 struct CameraData
 {
     glm::vec3 position;
-    float rotation;
     float fov;
+};
+
+struct DirectionalLight
+{
+    glm::vec3 direction;
+    glm::vec3 colour;
+    float intensity;
 };
 
 class ofApp : public ofBaseApp{
@@ -30,7 +36,7 @@ public:
 
 private:
     ofMesh m_torusMesh;
-    ofShader m_uvShader;
+    ofShader m_shader;
 
     CameraData m_camera;
 };

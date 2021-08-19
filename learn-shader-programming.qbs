@@ -12,9 +12,9 @@ Project{
         name: { return FileInfo.baseName(sourceDirectory) }
 
         files: [
+            "bin/data/ch7/diffuse.frag",
             "bin/data/ch7/mesh.vert",
             "bin/data/ch7/torus.ply",
-            "bin/data/ch7/uv_vis.frag",
             "src/main.cpp",
             "src/ofApp.cpp",
             "src/ofApp.h",
