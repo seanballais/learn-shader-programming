@@ -39,4 +39,6 @@ private:
     ofShader m_shader;
 
     CameraData m_camera;
+
+    glm::vec3 m_ambientColour;
 };

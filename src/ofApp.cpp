@@ -20,20 +20,26 @@ void ofApp::setup()
     ofDisableArbTex();
     ofEnableDepthTest();
 
-    m_torusMesh.load("ch7/torus.ply");
-    m_shader.load("ch7/mesh.vert", "ch7/torus.frag");
+    m_torusMesh.load("torus.ply");
+    m_shader.load("mesh.vert", "specular.frag");
+
+    m_ambientColour = glm::vec3(0.42f, 0.42f, 0.42f);
 }
 
 //--------------------------------------------------------------
 void ofApp::update()
 {
+    ofSetBackgroundColor(
+        m_ambientColour.r * 255,
+        m_ambientColour.g * 255,
+        m_ambientColour.b * 255);
 }
 
 //--------------------------------------------------------------
 void ofApp::draw()
 {
     DirectionalLight directionalLight;
-    directionalLight.direction = glm::normalize(glm::vec3(0.f, -1.f, 0.f));
+    directionalLight.direction = glm::normalize(glm::vec3(1.f, -1.f, 0.f));
     directionalLight.colour = glm::vec3(1.f, 1.f, 1.f);
     directionalLight.intensity = 1.f;
 
@@ -54,8 +60,6 @@ void ofApp::draw()
     glm::mat4 mvp = projection * view * model;
     glm::mat3 normalMatrix = glm::transpose(glm::inverse(glm::mat3(model)));
 
-    float rimIntensity = (std::sin(M_PI * (ofGetElapsedTimeMillis() / 1000.f)) / 4.f) + 0.5f;
-
     m_shader.begin();
     m_shader.setUniformMatrix4f("mvp", mvp);
     m_shader.setUniformMatrix3f("normalMatrix", normalMatrix);
@@ -63,8 +67,9 @@ void ofApp::draw()
     m_shader.setUniform3f("lightDirection", getLightDirection(directionalLight));
     m_shader.setUniform3f("lightColour", getLightColour(directionalLight));
     m_shader.setUniform3f("meshColour", glm::vec3(1.f, 0.f, 0.f));
+    m_shader.setUniform3f("meshSpecularColour", glm::vec3(1.f, 1.f, 1.f));
+    m_shader.setUniform3f("ambientColour", m_ambientColour);
     m_shader.setUniform3f("cameraPosition", m_camera.position);
-    m_shader.setUniform1f("rimIntensity", rimIntensity);
     m_torusMesh.draw();
     m_shader.end();
 }
